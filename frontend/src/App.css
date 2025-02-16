@@ -1,0 +1,10 @@
+/* Disable the eye from password input field */
+input::-ms-reveal, 
+input::-ms-clear {
+  display: none;
+}
+
+/* Disable the scrollbar line  */
+::-webkit-scrollbar {
+  display: none;
+}
