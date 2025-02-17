@@ -8,7 +8,7 @@ import messageRoute from './routes/messageRoute.js';
 import './utils/config.js'
 import path from 'path';
 
-const _dirname = path.resolve();
+const __dirname = path.resolve();
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -26,10 +26,12 @@ connectDB();
 app.use("/api/auth", authRoute)
 app.use("/api/message", messageRoute)
 
-app.use(express.static(path.join(_dirname, "../frontend/dist")))
-app.get('*', (req, res) => {
-    res.sendFile(path.join(_dirname, "../frontend", "dist", "index.html"))
-})
+if (process.env.MODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")))
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"))
+    })
+}
 
 const port = process.env.PORT
 server.listen(port, () => {

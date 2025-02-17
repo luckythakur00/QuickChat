@@ -18,7 +18,7 @@ function App() {
 
   if (isCheckingAuth && !authUser) {
     return (
-      <div className='h-screen flex justify-center items-center  bg-[#090909]' >
+      <div className='h-screen flex justify-center items-center bg-[#090909]' >
         <Loader className='size-10 animate-spin text-[#EFF6FC]' />
       </div>
     )
