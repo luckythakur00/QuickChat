@@ -1,5 +1,5 @@
 import React from 'react'
-import { LogOut, MessageSquare, Moon, Settings, Sun, User } from 'lucide-react';
+import { LogOut, MessageSquare, Moon, Sun, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore.js';
 
