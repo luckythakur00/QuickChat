@@ -12,7 +12,7 @@ function Navbar() {
                 <div className={`h-8 w-8 rounded-md flex justify-center items-center ${darkMode ? 'bg-[#1B1B1B]' : 'bg-white text-black shadow-md shadow-gray-700'}`} >
                     <MessageSquare className='h-5 animate-pulse' />
                 </div>
-                <h1 className={`ml-2 font-serif text-xl`}>QuickChat</h1>
+                <h1 className={`ml-2 font-serif text-xl`}>QuickChat ksjd</h1>
             </Link>
 
             <div className={`w-full flex justify-end items-center`} >
