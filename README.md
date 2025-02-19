@@ -2,7 +2,7 @@
 
 **QuickChat** is a real-time chat application built with the **MERN stack**. It offers seamless messaging with **Socket.io**, cloud image storage via **Cloudinary**, and efficient state management using **Zustand**. The app ensures a smooth, responsive UI with **React.js** and **Tailwind CSS**, while **MongoDB Atlas** powers the cloud database for scalable storage.  
 
-🚀 **Live Demo:** [Check it out here!](https://chatapp-9efp.onrender.com)  
+🚀 **Live Demo:** [Check it out here!](https://quickchat-dju4.onrender.com)  
 
 ## 🚀 Tech Stack  
 ### **Frontend:**  
