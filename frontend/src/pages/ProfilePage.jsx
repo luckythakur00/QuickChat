@@ -32,7 +32,7 @@ function ProfilePage() {
   const userCreateAt = `${time.getDate()}-${time.getMonth() + 1}-${time.getFullYear()} `
 
   return (
-    <div className={`w-full sm:max-w-[70%] md:max-w-[50%] lg:w-1/3 m-auto relative text-center rounded-md mt-5 sm:mt-10 p-4 ${darkMode ? 'bg-[#202020] shadow-md shadow-white/20' : 'bg-white shadow-md shadow-gray-500'}`}>
+    <div className={`w-[95%] sm:max-w-[70%] md:max-w-[50%] lg:w-1/3 m-auto relative text-center rounded-md mt-5 sm:mt-10 p-4 ${darkMode ? 'bg-[#202020] shadow-md shadow-white/20' : 'bg-white shadow-md shadow-gray-500'}`}>
 
       <div>
         <Link to={'/'} className=' absolute left-5 top-5' >

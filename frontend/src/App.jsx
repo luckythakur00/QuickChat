@@ -25,14 +25,18 @@ function App() {
   }
 
   return (
-    <div className={`min-h-screen w-full ${darkMode ? 'text-white bg-[#090909]' : 'bg-[#b1b1b1] text-black'} overflow-hidden`} >
-      <Navbar />
-      <Routes>
-        <Route path='/' element={authUser ? <HomePage /> : <Navigate to={'/login'} />} />
-        <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to={'/'} />} />
-        <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to={'/'} />} />
-        <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to={'/login'} />} />
-      </Routes>
+    <div className={`h-[100dvh] w-full ${darkMode ? 'text-white bg-[#090909]' : 'bg-[#b1b1b1] text-black'} overflow-hidden`} >
+      <div className='h-[7%]' >
+        <Navbar />
+      </div>
+      <div className='h-[93%]' >
+        <Routes>
+          <Route path='/' element={authUser ? <HomePage /> : <Navigate to={'/login'} />} />
+          <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to={'/'} />} />
+          <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to={'/'} />} />
+          <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to={'/login'} />} />
+        </Routes>
+      </div>
     </div>
   )
 }

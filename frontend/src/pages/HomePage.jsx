@@ -10,14 +10,14 @@ function HomePage() {
   const { sideBar, setSideBar } = useAuthStore();
 
   return (
-    <div className={` ${sideBar ? ' relative' : ''} h-[92.3vh] w-full lg:w-[90%] flex m-auto `} >
+    <div className={` ${sideBar ? ' relative' : ''} h-full w-full lg:w-[90%] flex m-auto `} >
       {/* Side Bar */}
-      <div className={`h-full ${sideBar ? ' absolute md:static z-30 w-[60%] md:w-1/3 lg:w-1/5' : 'invisible md:visible w-0 md:w-[9%] lg:w-[7%]'} rounded-md bg-green-400`}>
+      <div className={`h-full ${sideBar ? 'absolute md:static z-30 w-[60%] md:w-1/3 lg:w-1/5' : 'invisible md:visible w-0 md:w-[9%] lg:w-[7%]'} rounded-md bg-green-400`}>
         <SideBar />
       </div>
 
       {/* Chat Section */}
-      <div className={`h-full ${sideBar ? ' absolute md:static z-20 w-full md:w-2/3 lg:w-4/5' : 'w-full md:w-[91%] lg:w-[93%]'}`} >
+      <div className={`h-full ${sideBar ? 'absolute md:static z-20 w-full md:w-2/3 lg:w-4/5' : 'w-full md:w-[91%] lg:w-[93%]'}`} >
         {
           selectedUser ?
             <div className='h-full w-full '>
@@ -31,7 +31,7 @@ function HomePage() {
                   <X />
                 </button>
               }
-              <div className='flex flex-col justify-center items-center' >
+              <div className='w-[95%] text-center flex flex-col justify-center items-center' >
                 <div className='animate-bounce' >
                   <MessageSquare className='size-7 animate-pulse' />
                 </div>

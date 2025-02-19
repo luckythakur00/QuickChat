@@ -16,8 +16,7 @@ export function getreceiverSocketId(userId) {
     return userSocketMap[userId]
 }
 
-// Used to store online user
-const userSocketMap = {};   // {userId: socketId}
+const userSocketMap = {};
 
 io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId

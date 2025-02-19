@@ -31,7 +31,7 @@ function SideBar() {
                             <input type="checkbox" checked={showOnlineOnly} onChange={(e) => setShowOnlineOnly(e.target.checked)} className='cursor-pointer mt-1' />
                             <div className='flex flex-col justify-start items-start' >
                                 <h1 className='text-sm opacity-80' >Show online only</h1>
-                                <h1 className='text-xs font-bold text-gray-400'>{`(${onlineUsers?.length - 1} Online)`}</h1>
+                                <h1 className='text-xs font-bold text-gray-400'>{`(${onlineUsers?.length > 0 ? onlineUsers.length - 1 : 0} Online)`}</h1>
                             </div>
                         </div>
                     </div> :
@@ -51,7 +51,7 @@ function SideBar() {
                                 filteredUsers.length > 0 && filteredUsers.map(value => (
                                     <div onClick={() => setSelectedUser(value)} key={value._id} className={`px-[10%] ${selectedUser?._id === value._id ? darkMode ? 'bg-[#2a2a2a] rounded-sm' : 'bg-[#b1b1b1] rounded' : ''} h-14 px-2 flex justify-start items-center cursor-pointer`} >
                                         <div className='relative' >
-                                            <img src={value.profilePic || sideImg} className='h-10 w-10 mr-3 rounded-full bg-gray-400 object-cover' />
+                                            <img src={value.profilePic || sideImg} className='h-11 w-11 md:h-10 md:w-10 mr-3 rounded-full bg-gray-400 object-cover' />
                                             {
                                                 onlineUsers?.includes(value._id) && <div className='size-3 absolute bottom-0 right-3 bg-green-600 rounded-full' ></div>
                                             }
@@ -64,7 +64,7 @@ function SideBar() {
                                 ))
                             }
                             {
-                                filteredUsers.length === 0 && <h1 className='text-sm opacity-60 mt-4 text-center italic ' >No users online</h1>
+                                filteredUsers.length === 0 && <h1 className='text-lg opacity-60 mt-4 text-center italic ' >No users online</h1>
                             }
                         </div>
                     </div> :

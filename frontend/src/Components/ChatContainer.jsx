@@ -68,9 +68,9 @@ function ChatContainer() {
     }
 
     return (
-        <div className={`h-screen md:h-full w-full relative flex flex-col justify-center items-center ${darkMode ? 'bg-[#090909]' : 'bg-[#b1b1b1]'} `}>
+        <div className={`h-full md:h-full w-full relative flex flex-col justify-center items-center ${darkMode ? 'bg-[#090909]' : 'bg-[#b1b1b1]'} `}>
             {/* Top Section (Video Call) */}
-            <div className={`h-14 md:h-14 w-[95%] absolute z-30 top-3 flex justify-between pb-2 items-center px-2 rounded-md ${darkMode ? 'border-b bg-[#090909]' : 'bg-[#b1b1b1] border-b-2 border-gray-500 shadow-b-md shadow-black/10'}`} >
+            <div className={`h-[6%] md:h-14 w-[95%] absolute z-30 top-3 flex justify-between pb-2 items-center px-2 rounded-md ${darkMode ? 'border-b bg-[#090909]' : 'bg-[#b1b1b1] border-b-2 border-gray-500 shadow-b-md shadow-black/10'}`} >
                 <div className='flex justify-start items-center' >
                     {
                         !sideBar &&
@@ -88,7 +88,7 @@ function ChatContainer() {
             </div>
 
             {/* CHat section */}
-            <div className="h-[80%] md:h-[88%] lg:h-[83%] w-[95%] absolute mt-4 md:mt-0 mb-4 flex flex-col md:gap-2 overflow-auto p-2 md:p-4 z-20">
+            <div className={`h-[86%] md:h-[88%] lg:h-[83%] w-[95%] absolute md:mb-4 flex flex-col md:gap-2 overflow-auto p-2 md:p-4 z-20`}>
                 {
                     messages.length > 0 ? messages.map((val, ind) => (
                         <div key={ind} className={`flex flex-col my-1 ${val.senderId === authUser._id ? 'justify-end' : ''}`}>
@@ -99,7 +99,7 @@ function ChatContainer() {
                                 }
                                 <div className={`flex flex-col gap-1 rounded-md ${val.senderId === authUser._id ? 'items-end ' : ''}`}>
                                     <img src={val.image} className={`h-32 w-32 mb-1 rounded-md object-cover ${darkMode ? 'shadow-md shadow-white/10' : 'shadow-md shadow-black/90'} ${val.image ? 'visible' : 'hidden'}`} />
-                                    <h1 className={`max-w-80 md:max-w-96 p-2 text-sm md:text-base rounded-md ${val.senderId === authUser._id ? darkMode ? 'bg-[#036825] shadow-md shadow-white/10' : 'bg-[#6E00FF] text-white shadow-md shadow-black/90' : darkMode ? 'bg-[#272727] shadow-md shadow-white/15' : 'bg-white shadow-md shadow-purple-400'} ${val.text ? 'visible' : 'hidden'}`} >{val.text}</h1>
+                                    <h1 className={`max-w-80 md:max-w-96 p-2 text-sm md:text-base rounded-md ${val.senderId === authUser._id ? darkMode ? 'bg-[#036825] shadow-md shadow-white/10' : 'bg-[#9442ff] md:bg-[#6E00FF] text-white shadow-md shadow-black/70 md:shadow-black/90' : darkMode ? 'bg-[#272727] shadow-md shadow-white/15' : 'bg-white shadow-md shadow-black/60 md:shadow-purple-400'} ${val.text ? 'visible' : 'hidden'}`} >{val.text}</h1>
                                 </div>
                                 {
                                     val.senderId === authUser._id && <img src={authUser.profilePic || defaultImage} className='invisible md:visible h-0 w-0 md:h-10 md:w-10 object-cover rounded-full mx-0 md:mx-2 bg-gray-700' />
@@ -112,20 +112,20 @@ function ChatContainer() {
             </div>
 
             {/* Input Field */}
-            <div className={` ${imagePreview ? 'h-48' : 'h-16'} w-[95%] md:w-[90%] absolute bottom-0 z-20`} >
-                <div className={`h-[70%] md:h-[63%] w-36 absolute rounded-md overflow-hidden ${imagePreview ? 'visible' : 'hidden'}`} >
+            <div className={`${imagePreview ? 'h-[28%] md:h-48' : 'h-[8%] md:h-16'} w-[95%] md:w-[90%] absolute bottom-0`} >
+                <div className={`h-[70%] md:h-[63%] w-36 bg-red-400 absolute z-30 rounded-md overflow-hidden ${imagePreview ? 'visible' : 'hidden'}`} >
                     <img src={imagePreview} className='h-full w-full z-10 object-cover' />
                     <button onClick={removeImage} className='absolute top-1 right-1 z-20 bg-black text-white rounded-full ' > <X className='size-4' /> </button>
                 </div>
-                <form onSubmit={handleSendMessage} className={`${imagePreview ? 'h-[30%] md:h-[35%]' : 'h-[95%] md:h-full'} w-full absolute bottom-0`} >
+                <form onSubmit={handleSendMessage} className={`${imagePreview ? 'h-[30%] md:h-[35%]' : 'h-[95%] md:h-full'} w-full absolute bottom-0 z-30`} >
                     <div className={`h-[80%] w-full rounded-md overflow-hidden flex justify-center items-center ${darkMode ? 'bg-[#282828] shadow-md shadow-white/20' : 'bg-white shadow-md shadow-black/50'}`} >
-                        <div className='h-full w-[85%] lg:w-[90%] flex justify-center items-center ' >
-                            <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder='Type a message...' className={`h-full md:h-[80%] w-full md:w-[98%] ml-auto md:rounded-lg pl-2 border-none outline-none ${darkMode ? 'bg-[#3C3C3C]' : 'bg-[#d0d0d0]'}`} />
+                        <div className='h-full w-[82%] lg:w-[90%] flex justify-center items-center ' >
+                            <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder='Type a message...' className={`h-full md:h-[80%] w-full md:w-[98%] ml-auto md:rounded-lg pl-3 border-none outline-none ${darkMode ? 'bg-[#282828] md:bg-[#3C3C3C]' : 'bg-white md:bg-[#d0d0d0]'}`} />
                         </div>
-                        <div className='w-[15%] lg:w-[10%] flex justify-center items-center' >
-                            <button onClick={() => imageRef.current.click()} type='button' className='h-11 w-12 flex justify-center items-center' ><Image className={` size-5 md:size-6 ${darkMode ? 'text-green-400' : ''}`} /></button>
+                        <div className='w-[18%] lg:w-[10%] flex justify-center items-center' >
+                            <button onClick={() => imageRef.current.click()} type='button' className='h-11 w-12 flex justify-center items-center' ><Image className={`size-6 ${darkMode ? 'text-green-400' : ''}`} /></button>
                             <input type="file" ref={imageRef} accept="image/*" onChange={handleOnImageChange} className='hidden' />
-                            <button type='submit' disabled={!text && !imagePreview} className='h-11 w-12 flex justify-center items-center' > <Send className={` size-5 md:size-6 ${!text && !imagePreview ? darkMode ? 'text-gray-500' : 'text-purple-400' : darkMode ? 'text-white' : 'text-purple-800'}`} /></button>
+                            <button type='submit' disabled={!text && !imagePreview} className='h-11 w-12 flex justify-center items-center' > <Send className={`size-6 ${!text && !imagePreview ? darkMode ? 'text-gray-500' : 'text-purple-400' : darkMode ? 'text-white' : 'text-purple-800'}`} /></button>
                         </div>
                     </div>
                 </form>

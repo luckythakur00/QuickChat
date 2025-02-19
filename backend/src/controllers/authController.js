@@ -37,7 +37,7 @@ const signUpUser = async (req, res) => {
             })
         })
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error! (While SignUp)" })
+        res.status(500).json({ message: "Internal Server Error!" })
     }
 }
 
@@ -49,12 +49,12 @@ const logInUser = async (req, res) => {
     try {
         let user = await User.findOne({ email })
         if (!user) {
-            return res.status(400).json({ message: "Wrong Email" });
+            return res.status(400).json({ message: "Invalid credentials!" });
         } else {
             bcrypt.compare(password, user.password, (err, result) => {
-                if (err) res.status(400).json({ message: "Wrong Password" })
+                if (err) res.status(400).json({ message: "Invalid credentials!" })
                 if (!result) {
-                    return res.status(400).json({ message: "Wrong Password!!!" })
+                    return res.status(400).json({ message: "Invalid credentials!" })
                 }
                 let token = generateToken(user);
                 res.cookie('token', token);
@@ -78,7 +78,7 @@ const logOutUser = (req, res) => {
         res.cookie('token', '');
         res.status(200).json({ message: "User logout sucessfully!" })
     } catch (error) {
-        res.status(500).json({ message: "Server Error! while logOut" })
+        res.status(500).json({ message: "Server Error!" })
     }
 }
 
@@ -93,7 +93,7 @@ const updateProfile = async (req, res) => {
         const updateUser = await User.findByIdAndUpdate(userId, { profilePic: uploadResponse.secure_url }, { new: true })
         res.status(200).json(updateUser)
     } catch (error) {
-        res.status(500).json({ message: "Server error! in updateProfile" });
+        res.status(500).json({ message: "Server error!" });
     }
 }
 
@@ -101,7 +101,7 @@ const checkAuth = (req, res) => {
     try {
         res.status(200).json(req.user);
     } catch (error) {
-        res.status(500).json({ message: "Server Error! while logOut" })
+        res.status(500).json({ message: "Server Error!" })
     }
 }
 

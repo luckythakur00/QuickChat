@@ -9,7 +9,7 @@ const getUsersSideBar = async (req, res) => {
         let filterUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
         res.status(200).json(filterUsers)
     } catch (error) {
-        res.status(500).json({ message: "Server error! in side bar users" });
+        res.status(500).json({ message: "Server error!" });
     }
 }
 
@@ -26,7 +26,7 @@ const getMessages = async (req, res) => {
         });
         res.status(200).json(messages);
     } catch (error) {
-        res.status(500).json({ message: "Server error! in getMessages" });
+        res.status(500).json({ message: "Server error!" });
     }
 }
 
@@ -60,7 +60,7 @@ const sendMessage = async (req, res) => {
         res.status(200).json(newMessage);
     } catch (error) {
         console.error("Error while sending message:", error);
-        res.status(500).json({ message: "Server error in sendMessage" });
+        res.status(500).json({ message: "Server error!" });
     }
 };
 
