@@ -8,6 +8,7 @@ import ProfilePage from './pages/ProfilePage';
 import { useAuthStore } from './store/useAuthStore.js';
 import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
+import ErrorPage from './pages/ErrorPage.jsx';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth, darkMode } = useAuthStore();
@@ -35,6 +36,7 @@ function App() {
           <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to={'/'} />} />
           <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to={'/'} />} />
           <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to={'/login'} />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
     </div>

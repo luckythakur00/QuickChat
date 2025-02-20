@@ -1,8 +1,10 @@
-import { Eye, EyeOff, LockKeyhole, Mail, MessageSquare, User } from 'lucide-react'
+import { Eye, EyeOff, LockKeyhole, Mail, User } from 'lucide-react'
 import React, { useState } from 'react'
 import sideImage from '../assets/sideImage.png'
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../store/useAuthStore.js'
+import favicondark from '../assets/favicon.png'
+import faviconlight from '../assets/faviconlight.png'
 
 function SignUpPage() {
   const [userData, setUserData] = useState({
@@ -21,10 +23,10 @@ function SignUpPage() {
   return (
     <div className='h-full lg:flex' >
       {/* Left Side */}
-      <div className='h-full md:h-[50%] lg:h-full w-full lg:w-1/2 pt-4 md:pt-0 flex flex-col md:justify-center items-center md:gap-4' >
+      <div className='h-full md:h-[50%] lg:h-full w-full lg:w-1/2 pt-10 md:pt-0 flex flex-col md:justify-center items-center md:gap-4' >
         <div className='flex flex-col justify-center items-center' >
-          <div className={`h-10 w-10 rounded-md flex justify-center items-center ${darkMode ? 'bg-[#1B1B1B]' : 'bg-white'}`} >
-            <MessageSquare className='size-6 animate-pulse' />
+          <div className={`h-8 w-8 md:h-9 md:w-9 rounded-md flex justify-center items-center`} >
+            <img src={darkMode ? favicondark : faviconlight} className='h-full w-full animate-bounce' />
           </div>
           <h1 className='text-2xl font-bold py-1' >Create Account</h1>
           <p className='text-sm opacity-80'>Get started with your free account</p>
@@ -67,10 +69,10 @@ function SignUpPage() {
             </div>
           </div>
 
-          <button type='submit' className={`h-11 md:h-10 w-full sm:w-96 mt-2 rounded-md text-black text-lg  ${darkMode ? 'bg-green-600 shadow-sm shadow-white/50' : 'bg-[#945ecd] md:bg-purple-600 font-semibold shadow-md shadow-black/30 md:shadow-purple-500'}`} >  Create Account</button>
+          <button type='submit' className={`h-11 md:h-10 w-full sm:w-96 mt-2 font-bold rounded-md text-black text-lg  ${darkMode ? 'bg-green-600 hover:bg-green-700 shadow-sm shadow-white/50' : 'bg-[#945ecd] hover:bg-purple-700 md:bg-purple-600 font-semibold shadow-md shadow-black/30 md:shadow-purple-500'}`} >  Create Account</button>
         </form>
 
-        <h1 className='text-center font-semibold '>Already have an Accout? <Link to={'/login'} className={`${darkMode ? 'text-green-400 font-bold' : 'text-purple-500 md:text-purple-700 font-semibold text-lg'}`} >Log In</Link></h1>
+        <h1 className='text-center font-semibold pt-2 md:pt-0 '>Already have an Accout? <Link to={'/login'} className={`${darkMode ? 'text-green-400 font-bold' : 'text-purple-500 md:text-purple-700 font-semibold text-lg'}`} >Log In</Link></h1>
       </div>
 
       {/* Right Side */}

@@ -4,10 +4,12 @@ import SideBar from '../Components/SideBar';
 import ChatContainer from '../Components/ChatContainer';
 import { useChatStore } from '../store/useChatStore';
 import { useAuthStore } from '../store/useAuthStore';
+import favicondark from '../assets/favicon.png'
+import faviconlight from '../assets/faviconlight.png'
 
 function HomePage() {
   const { selectedUser } = useChatStore();
-  const { sideBar, setSideBar } = useAuthStore();
+  const { sideBar, setSideBar, darkMode } = useAuthStore();
 
   return (
     <div className={` ${sideBar ? ' relative' : ''} h-full w-full lg:w-[90%] flex m-auto `} >
@@ -32,8 +34,8 @@ function HomePage() {
                 </button>
               }
               <div className='w-[95%] text-center flex flex-col justify-center items-center' >
-                <div className='animate-bounce' >
-                  <MessageSquare className='size-7 animate-pulse' />
+                <div className={`h-8 w-8 md:h-9 md:w-9 rounded-md flex justify-center items-center`} >
+                  <img src={darkMode ? favicondark : faviconlight} className='h-full w-full animate-bounce' />
                 </div>
                 <h1 className='text-2xl font-bold py-1'>Welcome to QuickChat!</h1>
                 <p className='text-sm opacity-50 font-semibold'>Select the conversation from the sidebar to start chating.</p>
