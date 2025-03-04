@@ -29,7 +29,8 @@ const signUpUser = async (req, res) => {
                         data: {
                             _id: newUser._id,
                             fullName: newUser.fullName,
-                            email: newUser.email
+                            email: newUser.email,
+                            createdAt: newUser.createdAt
                         },
                         message: "User Created"
                     })
@@ -63,13 +64,14 @@ const logInUser = async (req, res) => {
                         _id: user._id,
                         fullName: user.fullName,
                         email: user.email,
-                        profilePic: user.profilePic
+                        profilePic: user.profilePic,
+                        createdAt: user.createdAt
                     }, message: "User logedIn"
                 });
             })
         }
     } catch (error) {
-        res.status(500).json({ message: "Server Error! in User login" });
+        res.status(500).json({ message: "Server Error!" });
     }
 }
 

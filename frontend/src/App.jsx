@@ -9,12 +9,15 @@ import { useAuthStore } from './store/useAuthStore.js';
 import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
 import ErrorPage from './pages/ErrorPage.jsx';
+import { useGroupStore } from './store/useGroupStore.js';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth, darkMode } = useAuthStore();
+  const { getAllGroups } = useGroupStore();
 
   useEffect(() => {
     checkAuth();
+    getAllGroups();
   }, [])
 
   if (isCheckingAuth && !authUser) {

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import authRoute from './routes/authRoute.js';
 import messageRoute from './routes/messageRoute.js';
+import groupRoute from './routes/groupRoute.js';
 import './utils/config.js'
 import path from 'path';
 
@@ -25,6 +26,7 @@ connectDB();
 
 app.use("/api/auth", authRoute)
 app.use("/api/message", messageRoute)
+app.use("/api/group", groupRoute)
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")))

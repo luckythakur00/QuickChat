@@ -12,11 +12,10 @@ function LoginPage() {
     password: ""
   })
   const [showPassword, setShowPassword] = useState(false);
-  const { logInUser, darkMode, authUser } = useAuthStore();
+  const { logInUser, darkMode } = useAuthStore();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("authUser:", authUser);
     logInUser(userData);
   }
 

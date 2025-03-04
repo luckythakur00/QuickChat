@@ -1,16 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react'
 import chatBgImg from '../assets/sideImage.png'
 import defaultImage from '../assets/profilePic.webp'
-import { ArrowLeft, Image, Send, X } from 'lucide-react'
+import groupImg from '../assets/groupAvatar.jpg'
+import { ArrowLeft, Beer, Image, Send, X } from 'lucide-react'
+import { createPortal } from 'react-dom';
 import { useChatStore } from '../store/useChatStore'
 import { useAuthStore } from '../store/useAuthStore';
+import { useGroupStore } from '../store/useGroupStore'
 import { toast } from 'react-toastify';
 
 function ChatContainer() {
     const { getMessages, setSelectedUser, selectedUser, sendMessage, messages, subscribeToMessages, unsubscribeToMessages } = useChatStore();
     const { onlineUsers, authUser, darkMode, setSideBar, sideBar } = useAuthStore();
+    const { groups, deleteGroup, getAllGroups } = useGroupStore();
+
     const [text, setText] = useState('');
     const [imagePreview, setImagePreview] = useState(null);
+    const [showDltModel, setShowDltModel] = useState(false)
+    const [selectedGroupId, setSelectedGroupId] = useState('');
+    const [selectedGroup, setSelectedGroup] = useState([]);
     const imageRef = useRef();
     const messagesEndRef = useRef();
 
@@ -51,7 +59,8 @@ function ChatContainer() {
         }
         setText('');
         setImagePreview(null);
-        await sendMessage(messageData);
+        sendMessage(messageData);
+        getMessages(selectedUser._id)
     }
 
     useEffect(() => {
@@ -67,6 +76,23 @@ function ChatContainer() {
         return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
     }
 
+    const handleDeleteGroup = (groupId) => {
+        setSelectedGroupId(groupId);
+        setShowDltModel(true)
+    }
+
+    const handleDelete = async () => {
+        setShowDltModel(false);
+        await deleteGroup(selectedGroupId)
+        await getAllGroups()
+        setSelectedUser(null)
+    };
+
+    useEffect(() => {
+        const groupData = groups.filter(group => group._id === selectedUser._id ? group : null)[0]?.members
+        setSelectedGroup(groupData);
+    }, [selectedUser])
+
     return (
         <div className={`h-full md:h-full w-full relative flex flex-col justify-center items-center ${darkMode ? 'bg-[#090909]' : 'bg-[#b1b1b1]'} `}>
             {/* Top Section (Video Call) */}
@@ -78,24 +104,64 @@ function ChatContainer() {
                             <ArrowLeft />
                         </button>
                     }
-                    <img src={selectedUser?.profilePic || defaultImage} className='h-10 w-10 mr-3 object-cover rounded-full bg-gray-400' />
+                    {
+                        groups.some(group => group._id === selectedUser._id)
+                            ? <img src={groupImg} className='h-10 w-10 mr-3 object-cover rounded-full bg-gray-400' />
+                            : <img src={selectedUser?.profilePic || defaultImage} className='h-10 w-10 mr-3 object-cover rounded-full bg-gray-400' />
+                    }
                     <div>
-                        <h1 className='font-semibold' >{selectedUser ? selectedUser.fullName : "User"}</h1>
-                        <h1 className='text-xs font-semibold' >{onlineUsers?.includes(selectedUser._id) ? <span className='text-green-700 ' >Online</span> : <span className='opacity-50' >Offline</span>}</h1>
+                        <h1 className='font-semibold' >{selectedUser ? selectedUser.fullName || selectedUser.groupName : "User"}</h1>
+                        {
+                            selectedUser && groups?.map((group, ind) => group._id === selectedUser._id && (
+                                <div key={ind} className='flex'>
+                                    {
+                                        group.members?.slice(0, 4).map((member, index) => (
+                                            <h1 key={index} className='md:hidden pr-2 text-xs opacity-50'>{member.fullName}</h1>
+                                        ))
+                                    }
+                                    {
+                                        group.members?.slice(0, 8).map((member, index) => (
+                                            <h1 key={index} className='hidden md:block pr-2 text-xs opacity-50'>{member.fullName}</h1>
+                                        ))
+                                    }
+                                </div>
+                            ))
+                        }
+                        {
+                            selectedUser.fullName && <h1 className='text-xs font-semibold' >{onlineUsers?.includes(selectedUser._id) ? <span className='text-green-700 ' >Online</span> : <span className='opacity-50' >Offline</span>}</h1>
+                        }
                     </div>
                 </div>
-                <button onClick={() => setSelectedUser(null)} className='text-xl font-semibold' >X</button>
+                <div className='flex gap-4' >
+                    {
+                        groups?.map(group => group._id === selectedUser._id && (
+                            group.admin === authUser._id ? <button key={group._id} onClick={() => handleDeleteGroup(group._id)} className='font-semibold text-red-700 hover:text-red-800 transition-all' ><Beer className='size-5' />  </button> : null
+                        ))
+                    }
+                    <button onClick={() => setSelectedUser(null)} className='text-xl font-semibold' >X</button>
+                </div>
             </div>
 
             {/* CHat section */}
-            <div className={`h-[86%] md:h-[88%] lg:h-[83%] w-[95%] absolute md:mb-4 flex flex-col md:gap-2 overflow-auto p-2 md:p-4 z-20`}>
+            <div className={`h-[86%] md:h-[88%] lg:h-[83%] w-[95%] md:mb-4 absolute flex flex-col md:gap-2 overflow-auto p-2 md:p-4 z-20`}>
                 {
                     messages.length > 0 ? messages.map((val, ind) => (
                         <div key={ind} className={`flex flex-col my-1 ${val.senderId === authUser._id ? 'justify-end' : ''}`}>
-                            <h1 className={`text-xs opacity-55 pb-0.5 ${val.senderId === authUser._id ? ' text-end pr-1 md:pr-14' : 'pl-1 md:pl-14'}`} >{convertTime(val.createdAt)}</h1>
-                            <div key={ind} className={`flex ${val.senderId === authUser._id ? 'justify-end' : ''}`} >
+                            <div className={`text-xs opacity-60 ${val.senderId === authUser._id ? '' : 'flex '}`} >
                                 {
-                                    val.senderId === selectedUser._id && <img src={selectedUser.profilePic || defaultImage} className='invisible md:visible h-0 w-0 md:h-10 md:w-10 object-cover rounded-full mx-0 md:mx-2 bg-gray-700' />
+                                    selectedGroup && <h1 className={`pl-1 md:pl-14 font-bold ${val.senderId === authUser._id ? 'invisible' : ''}`} >~{selectedGroup?.find(member => member._id === val.senderId)?.fullName}</h1>
+                                }
+                                <h1 className={`text-xs pb-0.5 ${val.senderId === authUser._id ? ' text-end pr-1 md:pr-14' : selectedGroup ? 'pl-1 md:pl-2' : 'pl-1 md:pl-14'}`} >{convertTime(val.createdAt)}</h1>
+                            </div>
+                            <div className={`flex ${val.senderId === authUser._id ? 'justify-end' : ''}`} >
+                                {
+                                    val.senderId !== authUser._id && (selectedGroup ?
+                                        selectedGroup.find(member => member._id === val.senderId) &&
+                                        <>
+                                            <img key={val.senderId} src={selectedGroup.find(member => member._id === val.senderId)?.profilePic || defaultImage} className='invisible md:visible h-0 w-0 md:h-10 md:w-10 object-cover rounded-full mx-0 md:mx-2 bg-gray-700' />
+                                        </>
+                                        : <img src={selectedUser.profilePic || defaultImage} className='invisible md:visible h-0 w-0 md:h-10 md:w-10 object-cover rounded-full mx-0 md:mx-2 bg-gray-700' />
+                                    )
                                 }
                                 <div className={`flex flex-col gap-1 rounded-md ${val.senderId === authUser._id ? 'items-end ' : ''}`}>
                                     <img src={val.image} className={`h-32 w-32 mb-1 rounded-md object-cover ${darkMode ? 'shadow-md shadow-white/10' : 'shadow-md shadow-black/90'} ${val.image ? 'visible' : 'hidden'}`} />
@@ -108,6 +174,7 @@ function ChatContainer() {
                         </div>
                     )) : null
                 }
+
                 <div ref={messagesEndRef} className='hidden'></div>
             </div>
 
@@ -131,8 +198,27 @@ function ChatContainer() {
                 </form>
             </div>
 
+            {/* Delete Group Confirmation */}
+            {
+                showDltModel && createPortal(
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+                            <h2 className="text-lg font-semibold">Are you sure?</h2>
+                            <p className="text-gray-600 text-sm">Do you really want to delete this group? This action cannot be undone.</p>
+                            <div className="mt-4 flex justify-end space-x-3">
+                                <button onClick={() => setShowDltModel(false)} className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
+                                <button onClick={handleDelete} className="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700">Confirm</button>
+                            </div>
+                        </div>
+                    </div>,
+                    document.body
+                )
+            }
+
             {/* Background image */}
-            < img src={chatBgImg} className={`${darkMode ? 'opacity-35' : 'opacity-70'}`} />
+            <div className='h-full w-full absolute flex justify-center items-center' >
+                <img src={chatBgImg} className={` ${darkMode ? 'opacity-35' : 'opacity-70'}`} />
+            </div>
         </div >
     )
 }

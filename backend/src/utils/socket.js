@@ -12,22 +12,32 @@ const io = new Server(server, {
     }
 })
 
-export function getreceiverSocketId(userId) {
-    return userSocketMap[userId]
-}
-
 const userSocketMap = {};
 
 io.on("connection", (socket) => {
-    const userId = socket.handshake.query.userId
-    if (userId) userSocketMap[userId] = socket.id
+    const userId = socket.handshake.query.userId;
+    if (userId) userSocketMap[userId] = socket.id;
 
-    io.emit("getOnlineUsers", Object.keys(userSocketMap))
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+    socket.join(userId);    // User join one-to-one messaging room.
+
+    socket.on("joinGroup", (groupId) => {
+        socket.join(groupId); // User joins group room.
+    });
+
+    socket.on("sendMessage", (data) => {
+        if (data.isGroup) {
+            io.to(data.receiverId).emit("receivedGroupMessage", data);
+        } else {
+            io.to(data.receiverId).emit("receivedOneToOneMessage", data);
+        }
+    });
 
     socket.on("disconnect", () => {
-        delete userSocketMap[userId]
-        io.emit("getOnlineUsers", Object.keys(userSocketMap))
-    })
-})
+        delete userSocketMap[userId];
+        io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    });
+});
 
 export { io, app, server }

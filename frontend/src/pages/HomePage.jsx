@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageSquare, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import SideBar from '../Components/SideBar';
 import ChatContainer from '../Components/ChatContainer';
 import { useChatStore } from '../store/useChatStore';
@@ -29,9 +29,7 @@ function HomePage() {
             <div className='h-full flex justify-center items-center relative'>
               {
                 !sideBar &&
-                <button onClick={() => setSideBar()} className='visible md:invisible absolute top-4 right-4' >
-                  <X />
-                </button>
+                <button onClick={() => setSideBar()} className='visible md:invisible absolute top-4 right-4' ><X /></button>
               }
               <div className='w-[95%] text-center flex flex-col justify-center items-center' >
                 <div className={`h-8 w-8 md:h-9 md:w-9 rounded-md flex justify-center items-center`} >

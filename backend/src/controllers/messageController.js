@@ -1,7 +1,7 @@
+import Group from "../models/groupModel.js";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "../utils/cloudinary.js";
-import { getreceiverSocketId, io } from "../utils/socket.js";
 
 const getUsersSideBar = async (req, res) => {
     try {
@@ -15,26 +15,38 @@ const getUsersSideBar = async (req, res) => {
 
 const getMessages = async (req, res) => {
     try {
-        const { id: userToChatId } = req.params;
+        const { id: chatId } = req.params; // Can be userId or groupId
         const myId = req.user._id;
 
-        const messages = await Message.find({
-            $or: [
-                { senderId: myId, receiverId: userToChatId },
-                { senderId: userToChatId, receiverId: myId }
-            ]
-        });
+        let messages;
+
+        const group = await Group.findById(chatId);
+
+        if (group) {
+            if (!group.members.includes(myId)) {
+                return res.status(403).json({ message: "User not in group" });
+            }
+            messages = await Message.find({ receiverId: chatId }).sort({ createdAt: 1 });
+        } else {
+            messages = await Message.find({
+                $or: [
+                    { senderId: myId, receiverId: chatId },
+                    { senderId: chatId, receiverId: myId }
+                ]
+            }).sort({ createdAt: 1 })
+        }
+
         res.status(200).json(messages);
     } catch (error) {
         res.status(500).json({ message: "Server error!" });
     }
-}
+};
 
 const sendMessage = async (req, res) => {
     try {
         const { text, image } = req.body;
-        const { id: receiverId } = req.params;
         const senderId = req.user._id;
+        const { id: roomId } = req.params;
 
         let imageUrl = null;
         if (image) {
@@ -43,23 +55,17 @@ const sendMessage = async (req, res) => {
             });
             imageUrl = uploadResponse.secure_url;
         }
+
         const newMessage = new Message({
             senderId,
-            receiverId,
+            receiverId: roomId,
             text,
             image: imageUrl
         });
+
         await newMessage.save();
-
-        // socket.io code here for sending message on real time to a perticular user.
-        const receiverSocketId = getreceiverSocketId(receiverId);
-        if (receiverSocketId) {
-            io.to(receiverSocketId).emit("newMessage", newMessage)
-        }
-
         res.status(200).json(newMessage);
     } catch (error) {
-        console.error("Error while sending message:", error);
         res.status(500).json({ message: "Server error!" });
     }
 };
